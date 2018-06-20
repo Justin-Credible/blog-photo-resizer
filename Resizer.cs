@@ -66,14 +66,13 @@ namespace JustinCredible.BlogPhotoResizer
 
             Console.WriteLine($"Found {totalCount} images...");
 
-            var fileNames = new List<string>();
+            var htmlBuilder = new StringBuilder();
+            htmlBuilder.AppendLine("<div class=\"photo-gallery\">");
 
-            // foreach (var imageFilePath in imageFilePaths)
             for (var index = 0; index < totalCount; index++)
             {
                 var imageFilePath = imageFilePaths[index];
                 var fileName = (new FileInfo(imageFilePath)).Name;
-                fileNames.Add(fileName);
 
                 Console.WriteLine($"Processing {index + 1} of {totalCount}: {fileName}");
 
@@ -123,23 +122,15 @@ namespace JustinCredible.BlogPhotoResizer
                     {
                         image.SaveAsJpeg(outputStream, encoder);
                     }
+
+                    // Build the HTML snippet for the thumbnail.
+                    htmlBuilder.AppendLine($"    <a href=\"/content/images/galleries/{galleryName}/{fileName}\" title=\"\" data-width=\"{fullWidth}\" data-height=\"{fullHeight}\">");
+                    htmlBuilder.AppendLine($"        <img src=\"/content/images/galleries/{galleryName}/thumbnails/{fileName}\" alt=\"\"/>");
+                    htmlBuilder.AppendLine($"    </a>");
                 }
             }
 
-            // Build the HTML markup for each photo.
-
-            var htmlBuilder = new StringBuilder();
-
-            htmlBuilder.AppendLine("<div class=\"photo-gallery\">");
-
-            foreach (var fileName in fileNames)
-            {
-                htmlBuilder.AppendLine($@"
-    <a href=""/content/images/galleries/{galleryName}/{fileName}"" title="""">
-        <img src=""/content/images/galleries/{galleryName}/thumbnails/{fileName}"" alt=""""/>
-    </a>
-");
-            }
+            // Finalize and write out the HTML.
 
             htmlBuilder.AppendLine("</div>");
 
