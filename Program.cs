@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Extensions.CommandLineUtils;
 using System.IO;
 
@@ -28,6 +28,7 @@ namespace JustinCredible.BlogPhotoResizer
 
                 var forceOption = command.Option("-f|--force", "Overwrites the output directory if it already exists.", CommandOptionType.NoValue);
                 var galleryNameOption = command.Option("-gn|--gallery-name", "The name of the gallery; used for the name of the absolute path in the markup.", CommandOptionType.SingleValue);
+                var generateHtmlOnlyOption = command.Option("-html|--generate-html-only", "Skip image generation and only emit the HTML file.", CommandOptionType.NoValue);
 
                 command.OnExecute(() =>
                 {
@@ -42,6 +43,7 @@ namespace JustinCredible.BlogPhotoResizer
                     var outputPath = Path.Combine(inputPath, "output");
                     var force = forceOption.HasValue();
                     var galleryName = galleryNameOption.HasValue() ? galleryNameOption.Value() : "new-gallery";
+                    var generateHtmlOnly = generateHtmlOnlyOption.HasValue();
 
                     Console.WriteLine("Performing image resize...");
                     Console.WriteLine("Input directory: " + inputPath);
@@ -49,7 +51,7 @@ namespace JustinCredible.BlogPhotoResizer
 
                     try
                     {
-                        Resizer.Resize(inputPath, outputPath, force, galleryName);
+                        Resizer.Resize(inputPath, outputPath, force, galleryName, generateHtmlOnly);
                     }
                     catch (Exception exception)
                     {
