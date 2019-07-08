@@ -9,7 +9,11 @@
                 "build",
                 "${workspaceFolder}/blog-photo-resizer.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
         }
     ]
 }
