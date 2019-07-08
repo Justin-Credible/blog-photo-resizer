@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.CommandLineUtils;
 using System.IO;
 
@@ -6,7 +6,7 @@ namespace JustinCredible.BlogPhotoResizer
 {
     class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             var app = new CommandLineApplication();
 
@@ -35,7 +35,7 @@ namespace JustinCredible.BlogPhotoResizer
 
                     if (String.IsNullOrEmpty(inputPath))
                     {
-                        ShowError("An input path must be provided.", app, "resize");
+                        ShowError("An input path must be provided.", app, command.Name);
                         return 1;
                     }
 
@@ -65,7 +65,7 @@ namespace JustinCredible.BlogPhotoResizer
                 });
             });
 
-            app.Execute(args);
+            return app.Execute(args);
         }
 
         private static void ShowError(string message, CommandLineApplication app = null, string command = null)
@@ -78,7 +78,7 @@ namespace JustinCredible.BlogPhotoResizer
             Console.ForegroundColor = originalForegroundColor;
 
             if (app != null && !String.IsNullOrEmpty(command))
-                app.ShowHelp("resize");
+                app.ShowHelp(command);
         }
     }
 }
