@@ -86,6 +86,7 @@ namespace JustinCredible.BlogPhotoResizer
                 using (var image = Image.Load(imageFilePath))
                 {
                     // Assume landscape
+                    var landscape = true;
                     var fullHeight = FULL_LANDSCAPE_HEIGHT;
                     var fullWidth = FULL_LANDSCAPE_WIDTH;
                     var thumbnailHeight = THUMBNAIL_LANDSCAPE_HEIGHT;
@@ -94,6 +95,7 @@ namespace JustinCredible.BlogPhotoResizer
                     // Detect portrait
                     if (image.Width < image.Height)
                     {
+                        landscape = false;
                         fullHeight = FULL_PORTRAIT_HEIGHT;
                         fullWidth = FULL_PORTRAIT_WIDTH;
                         thumbnailHeight = THUMBNAIL_PORTRAIT_HEIGHT;
@@ -107,7 +109,7 @@ namespace JustinCredible.BlogPhotoResizer
                         // Downscale the original image down to the target "full sized" image.
 
                         image.Mutate(x => x
-                            .Resize(fullWidth, fullHeight));
+                            .Resize(landscape ? fullWidth : 0, landscape ? 0 : fullHeight));
 
                         encoder.Quality = 70;
 
@@ -121,7 +123,7 @@ namespace JustinCredible.BlogPhotoResizer
                         // Downscale the original image down to the target thumbnail image.
 
                         image.Mutate(x => x
-                            .Resize(thumbnailWidth, thumbnailHeight));
+                            .Resize(landscape ? thumbnailWidth : 0, landscape ? 0 : thumbnailHeight));
 
                         encoder.Quality = 80;
 
